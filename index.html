@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>房贷税费计算器</title>
@@ -10,6 +10,9 @@
       <input type="text" id="price"/><br/>
       <label>原价</label>
       <input type="text" id="original_price"/><br/>
+      <input type="radio" name="dongqian" value="0">一手动迁
+      <input type="radio" name="dongqian" value="1" checked="true">非一手动迁
+      <br/>
       <input type="radio" name="age" value="0">满五唯一
       <input type="radio" name="age" value="1" checked="true">非满五唯一
       <br/>
@@ -32,12 +35,13 @@
     $("#cal").click(function (e) {
       e.preventDefault();
       var price = +$("#price").val();
-    		var original_price = +$("#original_price").val();
-    		var age = $('input[name="age"]:checked').val();
-    		var area = $('input[name="area"]:checked').val();
-      var zengzhishui = (price - original_price) / 1.05 * 0.056;
+    	var original_price = +$("#original_price").val();
+    	var age = $('input[name="age"]:checked').val();
+    	var area = $('input[name="area"]:checked').val();
+      var dongqian = $('input[name="dongqian"]:checked').val();
+      var zengzhishui = dongqian == "1" ? (price - original_price) / 1.05 * 0.056 : 0;
       var qishui = (price - zengzhishui) * (area == "1" ? 0.01 : 0.015);
-      var geshui = (price - zengzhishui) * (age == "1" ? 0.02 : 0);
+      var geshui = (price - zengzhishui) * (age == "1" ? (dongqian == "1" ? 0.02 : 0.01) : 0);
       var shoufu = price * 0.35;
       var zhongjiefei = price * 0.02;
       var zongshuifei = qishui + geshui + zengzhishui
