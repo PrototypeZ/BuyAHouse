@@ -1,0 +1,57 @@
+!DOCTYPE html>
+<html>
+  <head>
+    <title>房贷税费计算器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <form>
+      <label>报价</label>
+      <input type="text" id="price"/><br/>
+      <label>原价</label>
+      <input type="text" id="original_price"/><br/>
+      <input type="radio" name="age" value="0">满五唯一
+      <input type="radio" name="age" value="1" checked="true">非满五唯一
+      <br/>
+      <input type="radio" name="area" value="0" checked="true">大于90平米
+      <input type="radio" name="area" value="1">小于90平米
+      <br/>
+      <button id="cal">计算</button>
+    </form>
+    首付：  <span id="shoufu"></span><br/>
+    增值税：<span id="zengzhishui"></span><br/>
+    契税：  <span id="qishui"></span><br/>
+    个税：  <span id="geshui"></span><br/>
+    总税费： <span id="zongshuifei"></span><br/>
+    中介费： <span id="zhongjiefei"></span><br/>
+    总税费+中介费: <span id="zongshuifeiAndzhongjiefei"></span><br/>
+    首付准备现金：  <span id="cash"></span><br/>
+
+  </body>
+  <script type="text/javascript">
+    $("#cal").click(function (e) {
+      e.preventDefault();
+      var price = +$("#price").val();
+    		var original_price = +$("#original_price").val();
+    		var age = $('input[name="age"]:checked').val();
+    		var area = $('input[name="area"]:checked').val();
+      var zengzhishui = (price - original_price) / 1.05 * 0.056;
+      var qishui = (price - zengzhishui) * (area == "1" ? 0.01 : 0.015);
+      var geshui = (price - zengzhishui) * (age == "1" ? 0.02 : 0);
+      var shoufu = price * 0.35;
+      var zhongjiefei = price * 0.02;
+      var zongshuifei = qishui + geshui + zengzhishui
+
+      $("#shoufu").text(shoufu);
+      $("#zengzhishui").text(zengzhishui);
+      $("#qishui").text(qishui);
+      $("#geshui").text(geshui);
+      $("#zhongjiefei").text(zhongjiefei);
+      $("#zongshuifei").text(zongshuifei);
+      $("#zongshuifeiAndzhongjiefei").text(zongshuifei + zhongjiefei);
+      $("#cash").text(shoufu + zongshuifei + zhongjiefei);
+    })
+
+
+  </script>
+</html>
